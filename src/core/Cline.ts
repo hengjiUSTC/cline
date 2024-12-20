@@ -35,6 +35,7 @@ import {
 	ClineSay,
 	ClineSayBrowserAction,
 	ClineSayTool,
+	DebugMessage,
 } from "../shared/ExtensionMessage"
 import { getApiMetrics } from "../shared/getApiMetrics"
 import { HistoryItem } from "../shared/HistoryItem"
@@ -70,6 +71,7 @@ export class Cline {
 	autoApprovalSettings: AutoApprovalSettings
 	apiConversationHistory: Anthropic.MessageParam[] = []
 	clineMessages: ClineMessage[] = []
+	debugMessages: DebugMessage[] = []
 	private askResponse?: ClineAskResponse
 	private askResponseText?: string
 	private askResponseImages?: string[]
@@ -823,7 +825,14 @@ export class Cline {
 				}
 			}
 		}
-
+		this.debugMessages = [
+			{"role": "system", "content": systemPrompt},
+			...this.apiConversationHistory.map(message => ({
+				...message,
+				content: Array.isArray(message.content) ? message.content.map(block => block.type === 'text' ? block.text : JSON.stringify(block)).join('\n') : message.content
+			}))
+		]
+		this.providerRef.deref()?.postStateToWebview()
 		const stream = this.api.createMessage(systemPrompt, this.apiConversationHistory)
 		const iterator = stream[Symbol.asyncIterator]()
 

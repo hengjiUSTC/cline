@@ -19,6 +19,7 @@ export interface ExtensionMessage {
 		| "partialMessage"
 		| "openRouterModels"
 		| "mcpServers"
+		| "debugMessages"
 	text?: string
 	action?:
 		| "chatButtonClicked"
@@ -35,6 +36,7 @@ export interface ExtensionMessage {
 	partialMessage?: ClineMessage
 	openRouterModels?: Record<string, ModelInfo>
 	mcpServers?: McpServer[]
+	debugMessages?: DebugMessage[]
 }
 
 export interface ExtensionState {
@@ -43,6 +45,7 @@ export interface ExtensionState {
 	customInstructions?: string
 	uriScheme?: string
 	clineMessages: ClineMessage[]
+	debugMessages: DebugMessage[]
 	taskHistory: HistoryItem[]
 	shouldShowAnnouncement: boolean
 	autoApprovalSettings: AutoApprovalSettings
@@ -56,6 +59,11 @@ export interface ClineMessage {
 	text?: string
 	images?: string[]
 	partial?: boolean
+}
+
+export interface DebugMessage {
+	role: "user" | "system" | "assistant"
+	content: string
 }
 
 export type ClineAsk =

@@ -24,6 +24,7 @@ import BrowserSessionRow from "./BrowserSessionRow"
 import ChatRow from "./ChatRow"
 import ChatTextArea from "./ChatTextArea"
 import TaskHeader from "./TaskHeader"
+import DebugView from "../common/DebugView"
 import AutoApproveMenu from "./AutoApproveMenu"
 
 interface ChatViewProps {
@@ -253,6 +254,14 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 
 		return false
 	}, [modifiedMessages, clineAsk, enableButtons, primaryButtonText])
+
+	const [isHelloViewVisible, setIsHelloViewVisible] = useState(false);
+
+	const [isDebugViewVisible, setIsDebugViewVisible] = useState(false);
+
+	const handleNewButtonClick = () => {
+		setIsDebugViewVisible(!isDebugViewVisible);
+	};
 
 	const handleSendMessage = useCallback(
 		(text: string, images: string[]) => {
@@ -886,6 +895,17 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					}
 				}}
 			/>
+			<div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "10px 15px" }}>
+				{isDebugViewVisible && (
+					<DebugView onClose={() => setIsDebugViewVisible(false)} />
+				)}
+				<VSCodeButton
+					appearance="secondary"
+					style={{ width: "100%" }}
+					onClick={handleNewButtonClick}>
+					Debug View
+				</VSCodeButton>
+			</div>
 		</div>
 	)
 }

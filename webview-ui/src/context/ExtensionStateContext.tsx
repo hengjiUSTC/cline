@@ -31,6 +31,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 	const [state, setState] = useState<ExtensionState>({
 		version: "",
 		clineMessages: [],
+		debugMessages: [],
 		taskHistory: [],
 		shouldShowAnnouncement: false,
 		autoApprovalSettings: DEFAULT_AUTO_APPROVAL_SETTINGS,
@@ -89,6 +90,10 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 					}
 					return prevState
 				})
+				break
+			}
+			case "debugMessages": {
+				setState((prevState) => ({ ...prevState, debugMessages: message.debugMessages ?? [] }))
 				break
 			}
 			case "openRouterModels": {
